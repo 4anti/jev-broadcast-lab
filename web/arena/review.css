@@ -10,6 +10,7 @@ html[data-booth="arena"] .stage {
   grid-template-rows: minmax(0, 1fr) auto;
   gap: 8px 12px;
   padding: 8px 10px;
+  overflow: hidden;
 }
 html[data-booth="arena"] .board-slot {
   grid-column: 1;

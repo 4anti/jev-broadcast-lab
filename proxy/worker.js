@@ -53,7 +53,7 @@ function limited(ip) {
   }
   row.n += 1;
   HITS.set(ip, row);
-  return row.n > 40;
+  return row.n > 400;
 }
 
 function b64(buf) {

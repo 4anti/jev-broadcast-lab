@@ -58,7 +58,7 @@ Public live Jev uses that proxy:
 4. Copy the worker URL (example: `https://jev-broadcast-lab.<subdomain>.workers.dev`) into repo secret `JEV_PROXY_URL`.
 5. Re-run the `pages` workflow. The published site then calls the proxy. The browser never sees the TypeSafe key.
 
-Other websites cannot call Jev in a browser. The proxy checks Origin, `Sec-Fetch-Site`, and an HttpOnly cookie issued only to this lab. A script that fakes those headers can still spend quota. Rate limit is 40 calls per IP per minute. Cloudflare Access is the next step if that is not enough.
+Other websites cannot call Jev in a browser. The proxy checks Origin, `Sec-Fetch-Site`, and an HttpOnly cookie issued only to this lab. A script that fakes those headers can still spend quota. Rate limit is 400 calls per IP per minute. Cloudflare Access is the next step if that is not enough.
 
 If you host `server.py` yourself instead, set `CORS_ORIGINS=https://4anti.github.io` and use that host as `JEV_PROXY_URL`.
 
