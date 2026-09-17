@@ -1,7 +1,7 @@
 import { Chess } from "https://cdn.jsdelivr.net/npm/chess.js@1.4.0/dist/esm/chess.js";
 import "https://cdn.jsdelivr.net/npm/gchessboard@1.4.0/dist/index.es.js";
 import { bootChrome, setTicker, setCallMeta } from "../shared/chrome.js";
-import { systemOne } from "../shared/jev-client.js";
+import { systemOne, pagesHost } from "../shared/jev-client.js";
 import { buildMoveQuestions, DEFAULT_WHITE, DEFAULT_BLACK, resultText } from "../shared/chess-lab.js";
 import { ArenaReview } from "./operator-review.js";
 
@@ -199,7 +199,9 @@ async function requestJevMove() {
   if (!cfg.hasEnvKey && !key) {
     state.pendingRetry = true;
     $("retryBtn").style.display = "";
-    status("Add a TypeSafe key in the rack, or set TYPESAFE_API_KEY.");
+    status(pagesHost()
+      ? "GitHub Pages cannot hold the TypeSafe key. Paste a key in the rack, or run python server.py locally."
+      : "Add a TypeSafe key in the rack, or set TYPESAFE_API_KEY in .env and run python server.py.");
     return false;
   }
   const side = turn();

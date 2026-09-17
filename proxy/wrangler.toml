@@ -1,0 +1,7 @@
+name = "jev-broadcast-lab"
+main = "worker.js"
+compatibility_date = "2026-09-17"
+workers_dev = true
+
+[vars]
+ALLOW_ORIGIN = "https://4anti.github.io"

@@ -18,7 +18,8 @@ Docs: [docs.typesafe.ai](https://docs.typesafe.ai/)
 | chess.js | Legal moves, FEN, SAN, LAN |
 | Stockfish.js 18 lite WASM | Operator review only. Depth 10, 2s ceiling. White-pov CP |
 | `server.py` | Serves `web/` and holds `TYPESAFE_API_KEY` |
-| GitHub Pages | Static UI. No server key. Paste a key in the page, or run locally |
+| GitHub Pages | Static UI. No API key in the bundle |
+| `proxy/worker.js` | Optional Cloudflare Worker that holds the key |
 
 Jev sees compact state: `fen`, `stm`, `last`, `phase`, `ending`, plus move tags. It does not see Stockfish CP, best move, PV, accuracy, or captures.
 
@@ -41,11 +42,25 @@ Open http://127.0.0.1:8787/
 
 `.env` is gitignored. Do not commit it. Do not put the key in `web/`.
 
-## GitHub Pages
+## GitHub Pages and the API key
 
-The Actions workflow publishes the `web/` folder. In the GitHub repo: Settings, Pages, Source: GitHub Actions.
+GitHub Pages is a static host. Anything in the published `web/` folder is public. Putting `TYPESAFE_API_KEY` in the site, in a Pages build, or in a committed `config.json` would leak it. The key stays in `.env` on your machine and, for the public site, in GitHub Actions secrets. It never ships in JavaScript.
 
-Pages is the static lab (board, Stockfish, booths). It does not hold a TypeSafe key. Paste a key in the page for live calls. If the browser blocks `api.typesafe.ai` (CORS), use `python server.py` so the key stays on the server.
+Local live Jev: `python server.py` with `.env`. That is the supported operator path.
+
+Public live Jev needs a tiny proxy that attaches the key on the server:
+
+1. Create a free Cloudflare account.
+2. Add repo secrets `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, and `TYPESAFE_API_KEY`.
+3. Run the `proxy` workflow. It deploys `proxy/worker.js`.
+4. Copy the worker URL (example: `https://jev-broadcast-lab.<subdomain>.workers.dev`) into repo secret `JEV_PROXY_URL`.
+5. Re-run the `pages` workflow. The published site then calls the proxy. The browser never sees the TypeSafe key.
+
+The worker only answers browser calls from `https://4anti.github.io`. Anyone who spoofs that Origin can still spend quota. That is the limit of a public demo. Do not treat the worker as a private API.
+
+If you host `server.py` yourself instead, set `CORS_ORIGINS=https://4anti.github.io` and use that host as `JEV_PROXY_URL`.
+
+Paste-a-key in the rack remains for visitors who bring their own TypeSafe key. Direct browser calls to `api.typesafe.ai` may fail CORS.
 
 ## Arena
 

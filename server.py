@@ -51,6 +51,7 @@ UPSTREAM = os.environ.get("TYPESAFE_UPSTREAM", "https://api.typesafe.ai/v1/syste
 ENV_KEY = os.environ.get("TYPESAFE_API_KEY", "").strip()
 UPSTREAM_TIMEOUT = float(os.environ.get("TYPESAFE_TIMEOUT", "10"))
 MAX_IN_FLIGHT = int(os.environ.get("JEV_MAX_IN_FLIGHT", "2"))
+CORS_ORIGINS = tuple(x.strip() for x in os.environ.get("CORS_ORIGINS", "").split(",") if x.strip())
 COOKIE_NAME = "jev_lab"
 
 _parsed = urlparse(UPSTREAM)
@@ -70,6 +71,22 @@ def _send_json(handler: SimpleHTTPRequestHandler, status: int, payload: dict, ex
             handler.send_header(k, v)
     handler.end_headers()
     handler.wfile.write(body)
+
+
+def _cors_headers(handler: SimpleHTTPRequestHandler) -> list:
+    origin = (handler.headers.get("Origin") or "").strip()
+    if origin and origin in CORS_ORIGINS:
+        return [
+            ("Access-Control-Allow-Origin", origin),
+            ("Access-Control-Allow-Headers", "Content-Type, Authorization"),
+            ("Access-Control-Allow-Methods", "GET, POST, OPTIONS"),
+            ("Vary", "Origin"),
+        ]
+    return []
+
+
+def _merge(handler: SimpleHTTPRequestHandler, extra: Optional[list] = None) -> list:
+    return _cors_headers(handler) + list(extra or [])
 
 
 def _scrub(text: str) -> str:
@@ -217,6 +234,16 @@ class Handler(SimpleHTTPRequestHandler):
             return True
         return False
 
+    def do_OPTIONS(self) -> None:
+        headers = _cors_headers(self)
+        if not headers:
+            self.send_error(404, "Not Found")
+            return
+        self.send_response(204)
+        for k, v in headers:
+            self.send_header(k, v)
+        self.end_headers()
+
     def do_GET(self) -> None:
         if self._denied():
             self.send_error(404, "Not Found")
@@ -224,7 +251,7 @@ class Handler(SimpleHTTPRequestHandler):
         path = self.path.split("?", 1)[0]
         sid, created = _session_id(self)
         if path == "/config":
-            extra = [("Set-Cookie", _cookie_header(sid))] if created else None
+            extra = _merge(self, [("Set-Cookie", _cookie_header(sid))] if created else None)
             with SESS_LOCK:
                 depth = JOBS.qsize()
             _send_json(
@@ -256,7 +283,7 @@ class Handler(SimpleHTTPRequestHandler):
             return
         body = self.rfile.read(length) if length else b"{}"
         sid, created = _session_id(self)
-        extra = [("Set-Cookie", _cookie_header(sid))] if created else None
+        extra = _merge(self, [("Set-Cookie", _cookie_header(sid))] if created else None)
 
         incoming = (self.headers.get("Authorization") or "").strip()
         auth = ("Bearer " + ENV_KEY) if ENV_KEY else incoming

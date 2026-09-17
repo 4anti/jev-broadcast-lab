@@ -29,6 +29,21 @@ jobs:
             echo "Personal email in the git tree" >&2
             exit 1
           fi
+      - name: Point Pages at the key proxy
+        env:
+          PROXY: ${{ secrets.JEV_PROXY_URL }}
+        run: |
+          python - <<'PY'
+          import json, os
+          proxy = (os.environ.get("PROXY") or "").strip()
+          if not proxy:
+              raise SystemExit(0)
+          open("web/config.json", "w", encoding="utf-8").write(json.dumps({
+              "hasEnvKey": True,
+              "modelDefault": "jev-latest",
+              "proxy": proxy.rstrip("/"),
+          }))
+          PY
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:

@@ -14,11 +14,19 @@ export function extractError(text) {
   }
 }
 
-function pagesHost() {
+export function pagesHost() {
   try {
     return /\.github\.io$/i.test(location.hostname);
   } catch (_) {
     return false;
+  }
+}
+
+function proxyBase() {
+  try {
+    return String((window.__JEV_CFG && window.__JEV_CFG.proxy) || "").replace(/\/+$/, "");
+  } catch (_) {
+    return "";
   }
 }
 
@@ -47,14 +55,15 @@ export async function systemOne({ state, questions, model = "jev-latest", apiKey
   const headers = { "Content-Type": "application/json" };
   if (apiKey) headers.Authorization = "Bearer " + apiKey;
   const body = JSON.stringify({ model, state, questions });
+  const proxy = proxyBase();
   const local = ENDPOINT;
-  const first = pagesHost() && apiKey ? UPSTREAM : local;
+  const first = proxy ? proxy + "/v1/systemone" : (pagesHost() && apiKey ? UPSTREAM : local);
   try {
     return await post(first, { headers, body, signal: sig });
   } catch (err) {
     if (err.name === "AbortError") throw err;
-    if (err instanceof TypeError && first === UPSTREAM) {
-      throw new Error("TypeSafe blocked this origin. Run python server.py so the key stays on the server.");
+    if (err instanceof TypeError && (first === UPSTREAM || Boolean(proxy))) {
+      throw new Error("TypeSafe or the key proxy blocked this origin. Run python server.py so the key stays on the server.");
     }
     const canFallback = first === local && apiKey && (!err.status || err.status === 404 || err.status === 405);
     if (!canFallback) throw err;

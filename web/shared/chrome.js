@@ -77,13 +77,18 @@ export async function bootChrome({ booth }) {
   const key = document.getElementById("labKey");
   const model = document.getElementById("labModel");
   try {
-    const res = await fetch(siteUrl("config"));
-    if (!res.ok) throw new Error("no config");
-    const cfg = await res.json();
+    let cfg = null;
+    for (const path of ["config.json", "config"]) {
+      const res = await fetch(siteUrl(path));
+      if (!res.ok) continue;
+      cfg = await res.json();
+      break;
+    }
+    if (!cfg) throw new Error("no config");
     window.__JEV_CFG = cfg;
     if (model) model.textContent = cfg.modelDefault || "jev-latest";
     if (key) {
-      key.textContent = cfg.hasEnvKey ? "env key" : "paste key";
+      key.textContent = cfg.hasEnvKey ? (cfg.proxy ? "proxy" : "env key") : "paste key";
       key.classList.add(cfg.hasEnvKey ? "ok" : "warn");
     }
   } catch (_) {

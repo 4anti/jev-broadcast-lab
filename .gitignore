@@ -34,3 +34,6 @@ ehthumbs.db
 coverage/
 dist/
 build/
+web/config.json
+proxy/.dev.vars
+

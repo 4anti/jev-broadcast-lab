@@ -1,0 +1,23 @@
+name: proxy
+on:
+  push:
+    branches: [main]
+    paths:
+      - proxy/**
+      - .github/workflows/proxy.yml
+  workflow_dispatch:
+jobs:
+  deploy:
+    if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: proxy
+          secrets: |
+            TYPESAFE_API_KEY
+        env:
+          TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
