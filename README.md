@@ -1,6 +1,6 @@
 # Jev Broadcast Lab
 
-Operator lab for TypeSafe Jev (System One). Chess Arena is the main booth. The rest of the site reuses the same client, the same chrome, and the same closed schema.
+Operator lab for TypeSafe Jev (System One). Chess match is the main page. The rest of the site reuses the same client, the same chrome, and the same closed schema.
 
 This is not a chess engine and not a chatbot. chess.js owns legality. Jev only picks among a closed LAN list and returns Choice, Score, and Noul. Stockfish runs in the browser for the operator HUD. Engine scores never go into Jev's payload.
 
@@ -64,7 +64,7 @@ If you host `server.py` yourself instead, set `CORS_ORIGINS=https://4anti.github
 
 Paste-a-key in the rack remains for visitors who bring their own TypeSafe key. Direct browser calls to `api.typesafe.ai` may fail CORS.
 
-## Arena
+## Chess match
 
 Human vs Jev, or Jev vs Jev. The instruction box is a short Choice label. It does not teach chess. Filters do:
 
@@ -90,20 +90,22 @@ Stored in this browser. Finished games add White wins, Black wins, draws, and Je
 
 Elo is interpolated from community ACPL bands (100 ACPL ≈ 1000, 220 ACPL ≈ 200) after scaling depth-10 loss by `sqrt(18/10)`. Stockfish `UCI_Elo` starts at 1320. Below that the plate says below Stockfish. Not FIDE. Abandoned matches do not count. Reset score clears local totals. None of this is sent to Jev.
 
-## Booths
+## Pages
 
-| Route | Booth |
+| Route | Page |
 | --- | --- |
 | `/` | Home |
-| `/arena/` | Chess Arena |
-| `/lab/router/` | Desk Router |
-| `/lab/guard/` | Outbound Guard |
-| `/lab/rank/` | Ranker / Semantic Find |
-| `/lab/mod/` | Moderator |
-| `/lab/call/` | Function caller |
-| `/lab/pgn/` | PGN studio |
-| `/lab/loop/` | Doom-style loop |
-| `/deck/` | Pitch deck (`presentation.html` also works as a local file) |
+| `/arena/` | Chess match |
+| `/lab/router/` | Ticket desk |
+| `/lab/guard/` | Safety filter |
+| `/lab/rank/` | Document find |
+| `/lab/mod/` | Chat mod |
+| `/lab/emotion/` | Chat emotion |
+| `/lab/debate/` | Debate move |
+| `/lab/cheat/` | Cheating or not |
+| `/lab/call/` | Tool call |
+| `/lab/pgn/` | PGN puzzles |
+| `/lab/loop/` | Grid turns |
 
 ## Checks
 

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" data-booth="debate">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Debate move · Jev Broadcast Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;600&family=Red+Hat+Text:wght@400;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../shared/broadcast.css" />
+</head>
+<body>
+  <div class="booth">
+    <section class="stage">
+      <p class="kicker">Debate move</p>
+      <h1>Name the counter, not the vibes.</h1>
+      <p class="lede">Paste a claim and the reply. Jev picks the move from a closed list of fallacies and valid counters, whether it actually answers the claim, and how much of the original point survives. Pick an example, then Name.</p>
+      <div id="examples"></div>
+      <div id="out"><p class="idle-note">Move, target, on-point, and quality bars land here.</p></div>
+    </section>
+    <aside class="rack">
+      <h2>Exchange</h2>
+      <div class="field">
+        <label for="claim">Claim</label>
+        <textarea id="claim" rows="5">We should raise the city bus subsidy. Ridership is down because fares went up last year.</textarea>
+      </div>
+      <div class="field">
+        <label for="reply">Counter</label>
+        <textarea id="reply" rows="5">You only say that because you don't own a car. People with real jobs don't take the bus.</textarea>
+      </div>
+      <div class="field" id="keyField" style="display:none">
+        <label for="apiKey">TypeSafe API key</label>
+        <input id="apiKey" type="password" autocomplete="off" />
+      </div>
+      <button class="btn" id="runBtn">Name</button>
+    </aside>
+  </div>
+  <script type="module" src="./debate.js"></script>
+</body>
+</html>

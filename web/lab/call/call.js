@@ -1,4 +1,4 @@
-import { paintAnswers, bindRun, bootBooth, runSystemOne } from "../../shared/booth.js";
+import { paintAnswers, bindRun, bindExamples, bootBooth, runSystemOne } from "../../shared/booth.js";
 
 await bootBooth("call");
 
@@ -6,6 +6,17 @@ function parseAmount(raw) {
   const n = Number(String(raw).replace(/[^0-9.]/g, ""));
   return Number.isFinite(n) ? n : null;
 }
+
+bindExamples(document.getElementById("examples"), [
+  { label: "Duplicate refund", utter: "Refund the duplicate $49.50 to this card, reason duplicate_charge.", amount: "49.50" },
+  { label: "Search tickets", utter: "Find open tickets for this account from last week.", amount: "" },
+  { label: "Page on-call", utter: "SLA will miss in twenty minutes. Page billing-oncall now.", amount: "" },
+  { label: "Small talk", utter: "Thanks, that screenshot helped. I am good for now.", amount: "" },
+  { label: "Goodwill credit", utter: "Issue a $20 service credit for the downtime last night.", amount: "20" }
+], (item) => {
+  document.getElementById("utter").value = item.utter;
+  document.getElementById("amountHint").value = item.amount;
+});
 
 bindRun(document.getElementById("runBtn"), async () => {
   const utter = document.getElementById("utter").value;

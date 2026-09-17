@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" data-booth="call">
+<html lang="en" data-booth="emotion">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Tool call · Jev Broadcast Lab</title>
+<title>Chat emotion · Jev Broadcast Lab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;600&family=Red+Hat+Text:wght@400;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet" />
@@ -12,30 +12,29 @@
 <body>
   <div class="booth">
     <section class="stage">
-      <p class="kicker">Tool call</p>
-      <h1>Closed names. Numbers in code.</h1>
-      <p class="lede">Jev picks a function and enum args. The amount is parsed here with Number(). Jev never emits free-form JSON. Pick a line, then Map.</p>
+      <p class="kicker">Chat emotion</p>
+      <h1>What is this person feeling?</h1>
+      <p class="lede">Jev picks one label from a closed emotion list, then whether the thread is mixed, how strong it is, and whether they are hiding it. This is not a diagnosis. Pick a thread, then Read.</p>
       <div id="examples"></div>
-      <div class="answer-block" id="callout">No call yet.</div>
-      <div id="out"><p class="idle-note">Function and reason bars show here after Map.</p></div>
+      <div id="out"><p class="idle-note">Primary feeling, mix, intensity, and mask bars land here.</p></div>
     </section>
     <aside class="rack">
-      <h2>Utterance</h2>
+      <h2>Thread</h2>
       <div class="field">
-        <label for="utter">Operator line</label>
-        <textarea id="utter">Refund the duplicate $49.50 to this card, reason duplicate_charge.</textarea>
+        <label for="history">Earlier messages (optional)</label>
+        <textarea id="history" rows="6"></textarea>
       </div>
       <div class="field">
-        <label for="amountHint">Amount (parsed in code if present)</label>
-        <input id="amountHint" type="text" value="49.50" />
+        <label for="latest">Latest message</label>
+        <textarea id="latest" rows="5">I am fine. Seriously. Stop asking.</textarea>
       </div>
       <div class="field" id="keyField" style="display:none">
         <label for="apiKey">TypeSafe API key</label>
         <input id="apiKey" type="password" autocomplete="off" />
       </div>
-      <button class="btn" id="runBtn">Map</button>
+      <button class="btn" id="runBtn">Read</button>
     </aside>
   </div>
-  <script type="module" src="./call.js"></script>
+  <script type="module" src="./emotion.js"></script>
 </body>
 </html>

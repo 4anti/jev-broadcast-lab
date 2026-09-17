@@ -3,6 +3,7 @@ import "https://cdn.jsdelivr.net/npm/gchessboard@1.4.0/dist/index.es.js";
 import { bootChrome, setTicker, setCallMeta } from "../shared/chrome.js";
 import { systemOne, pagesHost } from "../shared/jev-client.js";
 import { buildMoveQuestions, DEFAULT_WHITE, DEFAULT_BLACK, resultText } from "../shared/chess-lab.js";
+import { bindExamples } from "../shared/booth.js";
 import { ArenaReview } from "./operator-review.js";
 
 const PROMO = ["q", "r", "b", "n"];
@@ -27,10 +28,18 @@ const state = {
   viewPly: 0,
   pendingPromo: null,
   last: { w: null, b: null },
-  pendingRetry: false
+  pendingRetry: false,
+  started: false,
+  endShown: false
 };
 // Review owns all engine results; the Jev request below only consumes chess-lab output.
-const review = new ArenaReview({ onPly: viewPly, onUpdate: renderHistory });
+const review = new ArenaReview({
+  onPly: viewPly,
+  onUpdate: () => {
+    renderHistory();
+    fillEndCard();
+  }
+});
 
 $("whiteInstr").value = DEFAULT_WHITE;
 $("blackInstr").value = DEFAULT_BLACK;
@@ -160,6 +169,36 @@ function paintPlate(side, d) {
   });
 }
 
+function vsLine() {
+  if (state.mode === "jvj") return "Jev vs Jev";
+  return state.humanColor === "b" ? "You (Black) vs Jev" : "You (White) vs Jev";
+}
+
+function sideLine(stats) {
+  if (stats.accuracy == null) return "Review still running";
+  return stats.accuracy.toFixed(1) + "% · ACPL " + stats.acpl.toFixed(1) + " · " +
+    stats.inaccuracies + " / " + stats.mistakes + " / " + stats.blunders;
+}
+
+function fillEndCard() {
+  if (!$("endOverlay").classList.contains("show")) return;
+  const card = review.scorecard();
+  $("endResult").textContent = resultText(state.game);
+  $("endMeta").textContent = card.ply + " plies · " + vsLine();
+  $("endWhite").textContent = sideLine(card.summary.w);
+  $("endBlack").textContent = sideLine(card.summary.b);
+  $("endJev").textContent = card.pending
+    ? "Review still running"
+    : (card.strength.elo == null ? "No rated Jev plies" : "Est. Elo " + card.strength.elo);
+}
+
+function showEndOnce() {
+  if (!state.started || state.endShown || !state.game.isGameOver()) return;
+  state.endShown = true;
+  $("endOverlay").classList.add("show");
+  fillEndCard();
+}
+
 function refreshStatus() {
   const g = state.game;
   if (g.isGameOver()) {
@@ -167,9 +206,10 @@ function refreshStatus() {
     setTicker(resultText(g));
     $("pauseBtn").disabled = true;
     $("stepBtn").disabled = true;
+    showEndOnce();
     return;
   }
-  if (state.pendingRetry) { status("Jev failed — retry."); return; }
+  if (state.pendingRetry) { status("Jev failed. Retry."); return; }
   if (state.thinking) { status("Jev on program…"); return; }
   if (state.paused && agentFor(turn()) === "jev") { status("Paused."); return; }
   if (agentFor(turn()) === "human") status((g.inCheck() ? "Check. " : "") + "Your move.");
@@ -331,7 +371,11 @@ function abortMatch() {
   state.thinking = false;
 }
 
-function startMatch() {
+function startMatch({ replay } = {}) {
+  if (replay && state.startFen) {
+    const start = new Chess().fen();
+    $("fenIn").value = state.startFen === start ? "" : state.startFen;
+  }
   const fen = $("fenIn").value.trim();
   let nextGame;
   try {
@@ -342,17 +386,25 @@ function startMatch() {
   }
   abortMatch();
   state.aborted = false;
+  state.started = true;
+  state.endShown = false;
   state.pendingRetry = false;
   $("retryBtn").style.display = "none";
+  $("endOverlay").classList.remove("show");
   state.game = nextGame;
   state.startFen = state.game.fen();
   state.pendingPromo = null;
   $("promoOverlay").classList.remove("show");
+  const keepColor = replay && state.mode === "hvj" && state.humanColor;
   if (state.mode === "jvj") {
     state.whiteAgent = "jev";
     state.blackAgent = "jev";
     state.humanColor = null;
     $("pace").value = $("pace").value === "0" ? "400" : $("pace").value;
+  } else if (keepColor) {
+    state.whiteAgent = state.humanColor === "w" ? "human" : "jev";
+    state.blackAgent = state.humanColor === "b" ? "human" : "jev";
+    $("pace").value = "0";
   } else {
     const side = state.playAs === "random" ? (Math.random() < 0.5 ? "w" : "b") : (state.playAs === "black" ? "b" : "w");
     state.humanColor = side;
@@ -395,7 +447,9 @@ $("sideSeg").addEventListener("click", (e) => {
   state.playAs = b.dataset.side;
   setSeg($("sideSeg"), "side", state.playAs);
 });
-$("startBtn").addEventListener("click", startMatch);
+$("startBtn").addEventListener("click", () => startMatch());
+$("endReplay").addEventListener("click", () => startMatch({ replay: true }));
+$("endClose").addEventListener("click", () => $("endOverlay").classList.remove("show"));
 $("pauseBtn").addEventListener("click", () => {
   state.paused = !state.paused;
   $("pauseBtn").textContent = state.paused ? "Resume" : "Pause";
@@ -489,6 +543,14 @@ document.addEventListener("keydown", (e) => {
     if (!$("pauseBtn").disabled) $("pauseBtn").click();
   }
 });
+
+bindExamples($("fenExamples"), [
+  { label: "Start", fen: "" },
+  { label: "Mate in 1", fen: "6k1/5ppp/8/8/8/8/5PPP/4R1K1 w - - 0 1" },
+  { label: "King and queen", fen: "8/8/8/4k3/8/8/4K3/7Q w - - 0 1" },
+  { label: "Scholar", fen: "r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4" },
+  { label: "Queen ending", fen: "6k1/5ppp/8/8/8/8/5PPP/4Q1K1 w - - 0 1" }
+], (item) => { $("fenIn").value = item.fen; });
 
 const cfg = await bootChrome({ booth: "arena" });
 if (!cfg.hasEnvKey) $("keyField").style.display = "";

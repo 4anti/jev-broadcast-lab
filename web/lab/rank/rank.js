@@ -1,4 +1,4 @@
-import { paintAnswers, bindRun, bootBooth, runSystemOne } from "../../shared/booth.js";
+import { paintAnswers, bindRun, bindExamples, bootBooth, runSystemOne } from "../../shared/booth.js";
 
 await bootBooth("rank");
 
@@ -20,7 +20,7 @@ function lines() {
   const out = DOC.map((text, i) => ({ id: "L" + String(i + 1).padStart(3, "0"), text }));
   if (overflow) {
     for (let i = out.length; i < 280; i++) {
-      out.push({ id: "L" + String(i + 1).padStart(3, "0"), text: "padding line " + (i + 1) + " — not the SLA" });
+      out.push({ id: "L" + String(i + 1).padStart(3, "0"), text: "padding line " + (i + 1) + " - not the SLA" });
     }
   }
   return out;
@@ -48,6 +48,14 @@ function paintDoc(all, hit) {
 }
 
 paintDoc(lines(), null);
+
+bindExamples(document.getElementById("examples"), [
+  { label: "Refund SLA", query: "Where is the refund SLA?" },
+  { label: "Password reset", query: "Who handles password resets?" },
+  { label: "Chargeback", query: "Where do chargeback codes live?" },
+  { label: "Escalation", query: "Who do I page if the SLA will miss?" },
+  { label: "Legal hold", query: "What happens to refunds under a legal hold?" }
+], (item) => { document.getElementById("query").value = item.query; });
 
 bindRun(document.getElementById("runBtn"), async () => {
   const all = lines();

@@ -176,6 +176,16 @@ export class ArenaReview {
 
   qualityAt(ply) { return this.enabled ? this.moves[ply - 1]?.quality : null; }
 
+  scorecard() {
+    return {
+      summary: summarizeMoves(this.moves),
+      strength: jevStrength(jevSample(this.moves, this.agents)),
+      pending: this.enabled && this.positions.some((position) => position.pending),
+      ply: this.moves.length,
+      agents: this.agents
+    };
+  }
+
   display(ply, orientation) {
     this.viewPly = ply;
     this.orientation = orientation;
@@ -207,7 +217,7 @@ export class ArenaReview {
     this.finalize();
     this.renderCareer();
     $("evalBar").hidden = !this.enabled;
-    $("reviewPanel").hidden = !this.enabled;
+    $("reviewHud").hidden = !this.enabled;
     document.querySelectorAll(".operator-metrics").forEach((el) => { el.hidden = !this.enabled; });
     if (!this.enabled) return;
     const value = position.evaluation;

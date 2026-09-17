@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CAT-04 Rank — Jev Broadcast Lab</title>
+<title>Document find · Jev Broadcast Lab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;600&family=Red+Hat+Text:wght@400;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet" />
@@ -12,12 +12,13 @@
 <body>
   <div class="booth">
     <section class="stage">
-      <p class="kicker">CAT-04 · Ranker / Semantic Find</p>
-      <h1>Choice over line ids. Cap 255.</h1>
-      <p class="lede">Jev picks a passage id. Code truncates the option list and paints the hit. Toggle overflow to see sent / legal counts when the doc is larger than the Choice cap.</p>
+      <p class="kicker">Document find</p>
+      <h1>Pick a line id. Cap 255.</h1>
+      <p class="lede">Jev chooses a passage id. Code truncates the option list and paints the hit. Pick a query, then Find.</p>
+      <div id="examples"></div>
       <div class="kv"><span class="k">Sent / lines</span><span class="v" id="sentLegal">—</span></div>
       <div class="line-list" id="lines"></div>
-      <div id="out"></div>
+      <div id="out"><p class="idle-note">The hit line lights up. Choice and in-doc bars show below after Find.</p></div>
     </section>
     <aside class="rack">
       <h2>Find</h2>

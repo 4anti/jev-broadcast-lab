@@ -299,11 +299,11 @@ export function buildMoveQuestions(game, { cap, compact, instructions, analyst }
 }
 
 export function resultText(g) {
-  if (g.isCheckmate()) return "Checkmate — " + (g.turn() === "w" ? "Black" : "White") + " wins";
-  if (g.isStalemate()) return "Draw — stalemate";
-  if (g.isThreefoldRepetition()) return "Draw — threefold";
-  if (g.isDrawByFiftyMoves()) return "Draw — fifty-move";
-  if (g.isInsufficientMaterial()) return "Draw — insufficient material";
+  if (g.isCheckmate()) return "Checkmate - " + (g.turn() === "w" ? "Black" : "White") + " wins";
+  if (g.isStalemate()) return "Draw - stalemate";
+  if (g.isThreefoldRepetition()) return "Draw - threefold";
+  if (g.isDrawByFiftyMoves()) return "Draw - fifty-move";
+  if (g.isInsufficientMaterial()) return "Draw - insufficient material";
   if (g.isDraw()) return "Draw";
   return "Game over";
 }

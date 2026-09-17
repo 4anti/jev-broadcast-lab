@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CAT-05 Mod — Jev Broadcast Lab</title>
+<title>Chat mod · Jev Broadcast Lab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;600&family=Red+Hat+Text:wght@400;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet" />
@@ -12,17 +12,18 @@
 <body>
   <div class="booth">
     <section class="stage">
-      <p class="kicker">CAT-05 · Moderator</p>
+      <p class="kicker">Chat mod</p>
       <h1>Allow, warn, or block.</h1>
-      <p class="lede">Choice on the policy action. Speculative Nouls ride along and are unused by the gate. They are calibration, not extra votes.</p>
+      <p class="lede">Choice on the policy action. Speculative Nouls ride along and are unused by the gate. Pick a post, then Moderate.</p>
+      <div id="examples"></div>
       <div id="gate" class="gate">STANDBY</div>
-      <div id="out"></div>
+      <div id="out"><p class="idle-note">Action, hate, and spam scores show here after Moderate.</p></div>
     </section>
     <aside class="rack">
       <h2>Post</h2>
       <div class="field">
         <label for="post">User content</label>
-        <textarea id="post">This replay booth is fire. Anyone got a spare CAT-01 seat?</textarea>
+        <textarea id="post">This replay booth is fire. Anyone got a spare match seat?</textarea>
       </div>
       <div class="field" id="keyField" style="display:none">
         <label for="apiKey">TypeSafe API key</label>

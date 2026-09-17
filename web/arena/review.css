@@ -34,12 +34,25 @@ html[data-booth="arena"] .operator-review {
   align-self: stretch;
   margin-top: 0;
   min-height: 0;
-  overflow: auto;
+  overflow: hidden;
   padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
 }
 html[data-booth="arena"] .eval-graph-wrap {
-  height: min(32vh, 280px);
+  height: min(22vh, 180px);
+  flex: 0 0 auto;
 }
+html[data-booth="arena"] .tape {
+  flex: 1 1 auto;
+  min-height: 120px;
+  overflow: auto;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+html[data-booth="arena"] .tape h2 { margin: 0 0 6px; }
+html[data-booth="arena"] .stage:has(#reviewHud[hidden]) .eval-graph-wrap { height: 0; }
 html[data-booth="arena"] .plate h3 { font-size: 22px; }
 html[data-booth="arena"] textarea { min-height: 64px; }
 html[data-booth="arena"] .rack { padding: 10px 12px 16px; }
@@ -136,7 +149,7 @@ html[data-booth="arena"] .stage:has(.operator-review[hidden]) .board-hud {
   left: 0;
   right: 0;
   background: var(--ink);
-  transition: height 200ms ease;
+  transition: height 500ms ease-out;
 }
 .eval-summary {
   display: flex;
@@ -158,6 +171,10 @@ html[data-booth="arena"] .stage:has(.operator-review[hidden]) .board-hud {
   border: 1px solid var(--line);
   background: #0c1018;
 }
+.end-card { min-width: min(420px, 92vw); text-align: left; }
+.end-card h3 { margin: 0 0 6px; }
+.end-card p { margin: 0 0 12px; color: var(--mute); font-size: 13px; }
+.end-card .btn-row { margin-top: 16px; }
 .review-heading, .review-move { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .review-heading { flex-wrap: wrap; }
 .review-heading h2 { margin: 0; color: var(--ink); font-size: 10px; letter-spacing: .08em; }

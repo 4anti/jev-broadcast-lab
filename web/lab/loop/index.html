@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CAT-08 Loop — Jev Broadcast Lab</title>
+<title>Grid turns · Jev Broadcast Lab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;600&family=Red+Hat+Text:wght@400;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet" />
@@ -12,11 +12,22 @@
 <body>
   <div class="booth">
     <section class="stage">
-      <p class="kicker">CAT-08 · Doom-style loop</p>
-      <h1>Next action. Fire. Threat.</h1>
-      <p class="lede">Tiny JSON world. Choice move, Noul fire, Score threat. TypeSafe’s own demo is ~10 qps. This rack caps rate so we do not burn quota.</p>
+      <p class="kicker">Grid turns</p>
+      <h1>Jev picks the next step.</h1>
+      <p class="lede">Tiny 8x8 grid. Each tick Jev chooses a move, whether to shoot, and how threatened you are. Pick a map, then Start.</p>
+      <div id="examples"></div>
+      <p class="legend">You = facing letter (N E S W). Enemy = E. A shot that hits respawns the enemy.</p>
       <div class="world" id="world"></div>
+      <div class="loop-hud">
+        <div class="kv"><span class="k">Tick</span><span class="v" id="tickN">0</span></div>
+        <div class="kv"><span class="k">HP / ammo</span><span class="v" id="stats">—</span></div>
+        <div class="kv"><span class="k">Last action</span><span class="v" id="lastAct">—</span></div>
+        <div class="kv"><span class="k">Fire</span><span class="v" id="lastFire">—</span></div>
+        <div class="kv"><span class="k">Threat</span><span class="v" id="lastThreat">—</span></div>
+      </div>
+      <p class="check" id="err"></p>
       <div class="log" id="log"></div>
+      <div id="out"><p class="idle-note">Latest tick answers show here while the run is live.</p></div>
     </section>
     <aside class="rack">
       <h2>Rate</h2>
@@ -28,8 +39,6 @@
         <label for="maxTicks">Max ticks</label>
         <input id="maxTicks" type="number" min="1" max="40" value="8" />
       </div>
-      <div class="kv"><span class="k">Tick</span><span class="v" id="tickN">0</span></div>
-      <div class="kv"><span class="k">HP / ammo</span><span class="v" id="stats">—</span></div>
       <div class="field" id="keyField" style="display:none">
         <label for="apiKey">TypeSafe API key</label>
         <input id="apiKey" type="password" autocomplete="off" />
@@ -38,7 +47,6 @@
         <button class="btn" id="runBtn">Start</button>
         <button class="btn ghost" id="stopBtn" disabled>Stop</button>
       </div>
-      <div id="out"></div>
     </aside>
   </div>
   <script type="module" src="./loop.js"></script>

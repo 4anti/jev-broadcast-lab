@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CAT-07 PGN — Jev Broadcast Lab</title>
+<title>PGN puzzles · Jev Broadcast Lab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;600&family=Red+Hat+Text:wght@400;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet" />
@@ -12,14 +12,15 @@
 <body>
   <div class="booth">
     <section class="stage">
-      <p class="kicker">CAT-07 · PGN studio</p>
+      <p class="kicker">PGN puzzles</p>
       <h1>Opening, blunder flag, puzzle shortlist.</h1>
-      <p class="lede">Chess.js still owns legality. Opening is Choice over a few first-move LANs. Blunder Noul is compared to local facts, not treated as truth. Puzzle Score sits on a capped shortlist.</p>
+      <p class="lede">Chess.js still owns legality. Opening is Choice over a few first-move LANs. Blunder Noul is compared to local facts, not treated as truth. Pick an example, then Run.</p>
+      <div id="examples"></div>
       <div class="board-wrap" style="max-width:min(52vh,420px)">
         <g-chess-board id="board" coordinates="inside"></g-chess-board>
       </div>
       <p class="check" id="facts">Local facts appear here after a run.</p>
-      <div id="out"></div>
+      <div id="out"><p class="idle-note">Jev answers show here after Run.</p></div>
     </section>
     <aside class="rack">
       <h2>Mode</h2>

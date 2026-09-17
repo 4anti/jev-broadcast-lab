@@ -1,24 +1,21 @@
-import { paintAnswers, bootBooth, runSystemOne } from "../../shared/booth.js";
+import { paintAnswers, bindExamples, bootBooth, runSystemOne } from "../../shared/booth.js";
 import { setTicker } from "../../shared/chrome.js";
 
 await bootBooth("loop");
 
 const SIZE = 8;
-let world = resetWorld();
+const MAPS = {
+  chase: { x: 1, y: 6, dir: "e", hp: 5, ammo: 3, foe: { x: 6, y: 1 }, last: "wait" },
+  adjacent: { x: 3, y: 3, dir: "e", hp: 5, ammo: 3, foe: { x: 4, y: 3 }, last: "wait" },
+  noammo: { x: 1, y: 6, dir: "e", hp: 5, ammo: 0, foe: { x: 2, y: 6 }, last: "wait" },
+  behind: { x: 4, y: 4, dir: "e", hp: 5, ammo: 3, foe: { x: 3, y: 4 }, last: "wait" },
+  lowhp: { x: 2, y: 2, dir: "n", hp: 1, ammo: 2, foe: { x: 2, y: 3 }, last: "wait" }
+};
+
+let mapKey = "chase";
+let world = structuredClone(MAPS.chase);
 let running = false;
 let serial = 0;
-
-function resetWorld() {
-  return {
-    x: 1,
-    y: 6,
-    dir: "e",
-    hp: 5,
-    ammo: 3,
-    foe: { x: 6, y: 1 },
-    last: "wait"
-  };
-}
 
 function dist(a, b) {
   return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
@@ -49,6 +46,10 @@ function logLine(text) {
   const d = document.createElement("div");
   d.textContent = text;
   el.prepend(d);
+}
+
+function showErr(text) {
+  document.getElementById("err").textContent = text || "";
 }
 
 function apply(choice, fire) {
@@ -82,11 +83,26 @@ function apply(choice, fire) {
 
 paintWorld();
 
+bindExamples(document.getElementById("examples"), [
+  { label: "Chase", key: "chase" },
+  { label: "Adjacent", key: "adjacent" },
+  { label: "No ammo", key: "noammo" },
+  { label: "Behind", key: "behind" },
+  { label: "Low HP", key: "lowhp" }
+], (item) => {
+  if (running) return;
+  mapKey = item.key;
+  world = structuredClone(MAPS[mapKey]);
+  showErr("");
+  paintWorld();
+});
+
 document.getElementById("runBtn").addEventListener("click", async () => {
-  world = resetWorld();
+  world = structuredClone(MAPS[mapKey]);
   running = true;
   serial += 1;
   const mine = serial;
+  showErr("");
   document.getElementById("runBtn").disabled = true;
   document.getElementById("stopBtn").disabled = false;
   document.getElementById("log").textContent = "";
@@ -132,23 +148,30 @@ document.getElementById("runBtn").addEventListener("click", async () => {
             criteria: ["Safe", "Watch", "Danger", "Critical"]
           }
         },
-        timeoutMs: 8000
+        timeoutMs: 20000
       });
       if (serial !== mine) return;
       const act = data.answers && data.answers.act && data.answers.act.choice;
       const fire = data.answers && data.answers.fire && data.answers.fire.noul;
+      const threat = data.answers && data.answers.threat && data.answers.threat.score;
       apply(act, fire);
       paintWorld();
       paintAnswers(document.getElementById("out"), data);
+      document.getElementById("lastAct").textContent = act || "—";
+      document.getElementById("lastFire").textContent = typeof fire === "number" ? fire.toFixed(2) : "—";
+      document.getElementById("lastThreat").textContent = typeof threat === "number" ? threat.toFixed(2) : "—";
       logLine("t" + (i + 1) + " " + act + " fire=" + (typeof fire === "number" ? fire.toFixed(2) : "—"));
-      setTicker("loop t" + (i + 1) + " " + act);
+      setTicker("grid t" + (i + 1) + " " + act);
     } catch (err) {
-      logLine("error " + (err.message || err));
-      setTicker("error " + (err.message || err));
+      const msg = err.message || String(err);
+      logLine("error " + msg);
+      showErr(msg);
+      setTicker("error " + msg);
       break;
     }
     if (world.hp <= 0) {
       logLine("down.");
+      showErr("HP hit zero. Stopped.");
       break;
     }
     await new Promise((r) => setTimeout(r, gap));

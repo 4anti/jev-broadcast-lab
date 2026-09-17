@@ -37,8 +37,7 @@ Confirmed capabilities:
 
 - Human vs Jev and Jev vs Jev on a chess.js board (gchessboard).
 - Compact Choice payloads (FEN + LAN keys), candidate cap ≤ 255, spectator pace slider.
-- Lab booths: Desk Router, Outbound Guard, Ranker/Find, Moderator, Function caller, PGN studio, Doom-style loop.
-- Pitch deck as a self-contained HTML presentation.
+- Lab pages: Ticket desk, Safety filter, Document find, Chat mod, Chat emotion, Debate move, Cheating or not, Tool call, PGN puzzles, Grid turns.
 - Server-side key from `TYPESAFE_API_KEY` / `.env`. Paste-in-UI key is local-dev fallback only.
 
 Constraints:

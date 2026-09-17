@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" data-booth="cheat">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cheating or not · Jev Broadcast Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;600&family=Red+Hat+Text:wght@400;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../shared/broadcast.css" />
+</head>
+<body>
+  <div class="booth">
+    <section class="stage">
+      <p class="kicker">Cheating or not</p>
+      <h1>Gray line, named. Not a verdict from God.</h1>
+      <p class="lede">Jev classifies a scenario on a closed scale: not cheating, micro, emotional affair, sexual affair, depends on the couple's deal, or a community or religious rule. Secrecy is scored separately. This is a lab toy. It is not counseling, fiqh, halakha, or canon law. Examples pull from relationship reporting (Schilling / AP on micro-cheating) and from how some communities describe extra boundaries. Pick a case, then Call.</p>
+      <div class="ex-group">
+        <h3>Micro and gray</h3>
+        <div id="exMicro"></div>
+      </div>
+      <div class="ex-group">
+        <h3>Clearer lines</h3>
+        <div id="exFull"></div>
+      </div>
+      <div class="ex-group">
+        <h3>Couple rules, culture, religion</h3>
+        <div id="exCulture"></div>
+      </div>
+      <div class="scene" id="scene">Pick a case. The full writeup lands here.</div>
+      <div id="out"><p class="idle-note">Verdict, secrecy, and typical trust-harm bars land here after Call.</p></div>
+    </section>
+    <aside class="rack">
+      <h2>Scenario</h2>
+      <div class="field">
+        <label for="setup">Couple setup</label>
+        <textarea id="setup" rows="3">Two adults, dating 3 years, verbally exclusive, no written rules. They have never listed what counts as cheating.</textarea>
+      </div>
+      <div class="field">
+        <label for="act">What happened</label>
+        <textarea id="act" rows="8"></textarea>
+      </div>
+      <div class="field" id="keyField" style="display:none">
+        <label for="apiKey">TypeSafe API key</label>
+        <input id="apiKey" type="password" autocomplete="off" />
+      </div>
+      <button class="btn" id="runBtn">Call</button>
+    </aside>
+  </div>
+  <script type="module" src="./cheat.js"></script>
+</body>
+</html>

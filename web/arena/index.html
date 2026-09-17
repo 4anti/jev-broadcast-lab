@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CAT-01 Arena — Jev Broadcast Lab</title>
+<title>Chess match test · Jev Broadcast Lab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;600&family=Red+Hat+Text:wght@400;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="../shared/broadcast.css" />
-<link rel="stylesheet" href="./review.css?v=6" />
+<link rel="stylesheet" href="./review.css?v=7" />
 </head>
 <body>
   <div class="booth">
@@ -43,20 +43,31 @@
           <span class="pip" aria-hidden="true"></span>
         </div>
       </div>
-      <section class="operator-review" id="reviewPanel" aria-label="Stockfish operator review">
-        <div class="review-heading">
-          <h2>Stockfish review <span class="operator-only">Operator only</span></h2>
-          <span id="reviewStatus" role="status">Waiting for analysis</span>
+      <section class="operator-review" id="reviewPanel" aria-label="Match review">
+        <div id="reviewHud">
+          <div class="review-heading">
+            <h2>Stockfish review <span class="operator-only">Operator only</span></h2>
+            <span id="reviewStatus" role="status">Waiting for analysis</span>
+          </div>
+          <div class="review-move">
+            <span id="reviewPly">Starting position</span>
+            <span class="move-quality" id="moveQuality">—</span>
+          </div>
+          <div class="eval-graph-wrap">
+            <svg id="evalGraph" viewBox="0 0 640 100" preserveAspectRatio="none" role="img" aria-label="White-perspective evaluation by ply"></svg>
+            <span id="evalGraphEmpty">Evaluation history appears as positions are reviewed.</span>
+          </div>
+          <p class="review-note">White above center. Black below. Click a ply in the list.</p>
         </div>
-        <div class="review-move">
-          <span id="reviewPly">Starting position</span>
-          <span class="move-quality" id="moveQuality">—</span>
+        <div class="tape">
+          <h2>Moves</h2>
+          <div id="history"></div>
+          <div class="btn-row">
+            <button class="btn ghost" id="prevPly">Prev</button>
+            <button class="btn ghost" id="nextPly">Next</button>
+            <button class="btn ghost" id="livePly">Live</button>
+          </div>
         </div>
-        <div class="eval-graph-wrap">
-          <svg id="evalGraph" viewBox="0 0 640 100" preserveAspectRatio="none" role="img" aria-label="White-perspective evaluation by ply"></svg>
-          <span id="evalGraphEmpty">Evaluation history appears as positions are reviewed.</span>
-        </div>
-        <p class="review-note">White above center · Black below · Select a ply to review</p>
       </section>
     </section>
     <aside class="rack">
@@ -177,6 +188,7 @@
         <label for="fenIn">Start FEN (optional)</label>
         <input id="fenIn" type="text" spellcheck="false" placeholder="leave blank for initial" />
       </div>
+      <div class="examples" id="fenExamples"></div>
       <div class="field" id="keyField" style="display:none">
         <label for="apiKey">TypeSafe API key</label>
         <input id="apiKey" type="password" autocomplete="off" />
@@ -184,14 +196,6 @@
       <div class="kv"><span class="k">Sent / legal</span><span class="v" id="sentLegal">—</span></div>
       <div class="kv"><span class="k">Tokens</span><span class="v" id="tokLine">—</span></div>
       <div id="analystOut" class="answer-block" style="display:none"></div>
-
-      <h2>Ply tape</h2>
-      <div id="history"></div>
-      <div class="btn-row">
-        <button class="btn ghost" id="prevPly">Prev</button>
-        <button class="btn ghost" id="nextPly">Next</button>
-        <button class="btn ghost" id="livePly">Live</button>
-      </div>
     </aside>
   </div>
   <div class="promo-overlay" id="promoOverlay">
@@ -199,6 +203,19 @@
       <h3>Promote</h3>
       <div class="promo-choices" id="promoChoices"></div>
       <button class="btn ghost" id="promoCancel">Cancel</button>
+    </div>
+  </div>
+  <div class="promo-overlay" id="endOverlay">
+    <div class="promo-card end-card">
+      <h3 id="endResult">Game over</h3>
+      <p id="endMeta"></p>
+      <div class="kv"><span class="k">White</span><span class="v" id="endWhite">—</span></div>
+      <div class="kv"><span class="k">Black</span><span class="v" id="endBlack">—</span></div>
+      <div class="kv"><span class="k">Jev</span><span class="v" id="endJev">—</span></div>
+      <div class="btn-row">
+        <button class="btn" id="endReplay">Play again</button>
+        <button class="btn ghost" id="endClose">Close</button>
+      </div>
     </div>
   </div>
   <script type="module" src="./arena.js"></script>

@@ -2,16 +2,18 @@ import { SITE, siteUrl, pathNorm } from "./site.js";
 import { startProxySession } from "./jev-client.js";
 
 const LINKS = [
-  { path: "", id: "CAT-00", label: "Home" },
-  { path: "arena/", id: "CAT-01", label: "Arena" },
-  { path: "lab/router/", id: "CAT-02", label: "Router" },
-  { path: "lab/guard/", id: "CAT-03", label: "Guard" },
-  { path: "lab/rank/", id: "CAT-04", label: "Rank" },
-  { path: "lab/mod/", id: "CAT-05", label: "Mod" },
-  { path: "lab/call/", id: "CAT-06", label: "Caller" },
-  { path: "lab/pgn/", id: "CAT-07", label: "PGN" },
-  { path: "lab/loop/", id: "CAT-08", label: "Loop" },
-  { path: "deck/", id: "CAT-09", label: "Deck" }
+  { path: "", label: "Home" },
+  { path: "arena/", label: "Chess match" },
+  { path: "lab/router/", label: "Ticket desk" },
+  { path: "lab/guard/", label: "Safety filter" },
+  { path: "lab/rank/", label: "Document find" },
+  { path: "lab/mod/", label: "Chat mod" },
+  { path: "lab/emotion/", label: "Chat emotion" },
+  { path: "lab/debate/", label: "Debate move" },
+  { path: "lab/cheat/", label: "Cheating or not" },
+  { path: "lab/call/", label: "Tool call" },
+  { path: "lab/pgn/", label: "PGN puzzles" },
+  { path: "lab/loop/", label: "Grid turns" }
 ];
 
 function pad(n) {
@@ -40,7 +42,7 @@ export async function bootChrome({ booth }) {
     const url = siteUrl(item.path);
     const a = document.createElement("a");
     a.href = url.href;
-    a.innerHTML = `<span>${item.label}</span><span class="id">${item.id}</span>`;
+    a.textContent = item.label;
     const path = pathNorm(url.pathname);
     const on = item.path ? here === path || here.startsWith(path + "/") : here === home;
     if (on) a.setAttribute("aria-current", "page");
@@ -71,7 +73,7 @@ export async function bootChrome({ booth }) {
   if (location.protocol !== "http:" && location.protocol !== "https:") {
     const w = document.createElement("div");
     w.className = "file-warn show";
-    w.textContent = "Open via python server.py at http://127.0.0.1:8787 — file:// cannot reach Jev.";
+    w.textContent = "Open via python server.py at http://127.0.0.1:8787. file:// cannot reach Jev.";
     main.prepend(w);
   }
 

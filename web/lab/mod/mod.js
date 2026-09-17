@@ -1,6 +1,14 @@
-import { paintAnswers, bindRun, bootBooth, runSystemOne } from "../../shared/booth.js";
+import { paintAnswers, bindRun, bindExamples, bootBooth, runSystemOne } from "../../shared/booth.js";
 
 await bootBooth("mod");
+
+bindExamples(document.getElementById("examples"), [
+  { label: "Friendly", text: "This replay booth is fire. Anyone got a spare match seat?" },
+  { label: "Harassment", text: "You people are trash and that operator should get lost." },
+  { label: "Spam", text: "Cheap Elo boosts at boost-now.example, first 10 signups free, DM me." },
+  { label: "Threat", text: "I know where you live. Show up tomorrow and find out." },
+  { label: "Mild insult", text: "That last move was dumb, but gg anyway." }
+], (item) => { document.getElementById("post").value = item.text; });
 
 bindRun(document.getElementById("runBtn"), async () => {
   const post = document.getElementById("post").value;

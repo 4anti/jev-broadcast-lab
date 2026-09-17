@@ -1,6 +1,6 @@
 import { Chess } from "https://cdn.jsdelivr.net/npm/chess.js@1.4.0/dist/esm/chess.js";
 import "https://cdn.jsdelivr.net/npm/gchessboard@1.4.0/dist/index.es.js";
-import { paintAnswers, bindRun, bootBooth, runSystemOne } from "../../shared/booth.js";
+import { paintAnswers, bindRun, bindExamples, bootBooth, runSystemOne } from "../../shared/booth.js";
 import { capMoves } from "../../shared/chess-lab.js";
 
 await bootBooth("pgn");
@@ -10,15 +10,31 @@ const board = document.getElementById("board");
 let mode = "opening";
 board.fen = START;
 
-document.getElementById("modeSeg").addEventListener("click", (e) => {
-  const b = e.target.closest("button[data-mode]");
-  if (!b) return;
-  mode = b.dataset.mode;
+function setMode(next) {
+  mode = next;
   for (const x of document.getElementById("modeSeg").querySelectorAll("button")) {
-    const on = x === b;
+    const on = x.dataset.mode === mode;
     x.classList.toggle("active", on);
     x.setAttribute("aria-pressed", on ? "true" : "false");
   }
+}
+
+document.getElementById("modeSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-mode]");
+  if (!b) return;
+  setMode(b.dataset.mode);
+});
+
+bindExamples(document.getElementById("examples"), [
+  { label: "Opening", mode: "opening" },
+  { label: "Scholar mate", mode: "blunder", pgn: "1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#" },
+  { label: "Quiet line", mode: "blunder", pgn: "1. e4 e5 2. Nf3 Nc6 3. Bb5 a6" },
+  { label: "Mate in one", mode: "puzzle", fen: "6k1/5ppp/8/8/8/8/5PPP/4R1K1 w - - 0 1" },
+  { label: "Middlegame miss", mode: "blunder", pgn: "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 Ng4 7. Qxg4" }
+], (item) => {
+  setMode(item.mode);
+  if (item.pgn) document.getElementById("pgn").value = item.pgn;
+  if (item.fen) document.getElementById("fen").value = item.fen;
 });
 
 function localFacts(game) {
