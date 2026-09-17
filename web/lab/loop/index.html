@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" data-booth="loop">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CAT-08 Loop — Jev Broadcast Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;600&family=Red+Hat+Text:wght@400;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../shared/broadcast.css" />
+</head>
+<body>
+  <div class="booth">
+    <section class="stage">
+      <p class="kicker">CAT-08 · Doom-style loop</p>
+      <h1>Next action. Fire. Threat.</h1>
+      <p class="lede">Tiny JSON world. Choice move, Noul fire, Score threat. TypeSafe’s own demo is ~10 qps. This rack caps rate so we do not burn quota.</p>
+      <div class="world" id="world"></div>
+      <div class="log" id="log"></div>
+    </section>
+    <aside class="rack">
+      <h2>Rate</h2>
+      <div class="field">
+        <label for="hz">Ticks per second</label>
+        <input id="hz" type="number" min="0.2" max="4" step="0.2" value="1" />
+      </div>
+      <div class="field">
+        <label for="maxTicks">Max ticks</label>
+        <input id="maxTicks" type="number" min="1" max="40" value="8" />
+      </div>
+      <div class="kv"><span class="k">Tick</span><span class="v" id="tickN">0</span></div>
+      <div class="kv"><span class="k">HP / ammo</span><span class="v" id="stats">—</span></div>
+      <div class="field" id="keyField" style="display:none">
+        <label for="apiKey">TypeSafe API key</label>
+        <input id="apiKey" type="password" autocomplete="off" />
+      </div>
+      <div class="btn-row">
+        <button class="btn" id="runBtn">Start</button>
+        <button class="btn ghost" id="stopBtn" disabled>Stop</button>
+      </div>
+      <div id="out"></div>
+    </aside>
+  </div>
+  <script type="module" src="./loop.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "jev-broadcast-lab",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node web/shared/chess-lab.check.js && node web/shared/sf-eval.check.js && node web/shared/jev-score.check.js",
+    "test:engine": "node web/shared/sf-eval.check.js --engine",
+    "test:browser": "node tests/arena.browser.check.cjs"
+  },
+  "devDependencies": {
+    "chess.js": "1.4.0",
+    "playwright": "1.62.1"
+  }
+}

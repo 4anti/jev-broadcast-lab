@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" data-booth="arena">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CAT-01 Arena — Jev Broadcast Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;600&family=Red+Hat+Text:wght@400;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/broadcast.css" />
+<link rel="stylesheet" href="./review.css?v=6" />
+</head>
+<body>
+  <div class="booth">
+    <section class="stage">
+      <div class="board-slot">
+        <div class="board-hud">
+          <aside class="eval-bar" id="evalBar" aria-label="Stockfish position evaluation">
+            <span class="eval-label">STOCKFISH</span>
+            <div class="eval-track" aria-hidden="true"><div id="evalFill" style="height:50%"></div></div>
+            <div class="eval-summary"><strong id="evalValue">—</strong><span id="evalDirection">Pending</span></div>
+          </aside>
+          <div class="capture-strip top-captures">
+            <span class="capture-side" id="topCaptureSide">Black</span>
+            <span class="captured-pieces" id="topCaptures" aria-label="Pieces captured by Black">—</span>
+            <span class="material-advantage" id="topMaterial"></span>
+          </div>
+          <div class="board-wrap">
+            <g-chess-board id="board" coordinates="inside"></g-chess-board>
+          </div>
+          <div class="capture-strip bottom-captures">
+            <span class="capture-side" id="bottomCaptureSide">White</span>
+            <span class="captured-pieces" id="bottomCaptures" aria-label="Pieces captured by White">—</span>
+            <span class="material-advantage" id="bottomMaterial"></span>
+          </div>
+        </div>
+      </div>
+      <div class="lower-third">
+        <div class="san-xl" id="ltSan">—</div>
+        <div>
+          <div id="ltLan" style="font-family:var(--font-mono);color:var(--mute)">no ply</div>
+          <div id="statusText" aria-live="polite">Pick a match type and start.</div>
+          <span class="pip" aria-hidden="true"></span>
+        </div>
+      </div>
+      <section class="operator-review" id="reviewPanel" aria-label="Stockfish operator review">
+        <div class="review-heading">
+          <h2>Stockfish review <span class="operator-only">Operator only</span></h2>
+          <span id="reviewStatus" role="status">Waiting for analysis</span>
+        </div>
+        <div class="review-move">
+          <span id="reviewPly">Starting position</span>
+          <span class="move-quality" id="moveQuality">—</span>
+        </div>
+        <div class="eval-graph-wrap">
+          <svg id="evalGraph" viewBox="0 0 640 100" preserveAspectRatio="none" role="img" aria-label="White-perspective evaluation by ply"></svg>
+          <span id="evalGraphEmpty">Evaluation history appears as positions are reviewed.</span>
+        </div>
+        <p class="review-note">White above center · Black below · Select a ply to review</p>
+      </section>
+    </section>
+    <aside class="rack">
+      <h2>Match</h2>
+      <div class="seg" id="modeSeg">
+        <button data-mode="hvj" class="active" aria-pressed="true">Human vs Jev</button>
+        <button data-mode="jvj">Jev vs Jev</button>
+      </div>
+      <div id="humanSideWrap">
+        <label>You play</label>
+        <div class="seg" id="sideSeg">
+          <button data-side="white" class="active" aria-pressed="true">White</button>
+          <button data-side="black">Black</button>
+          <button data-side="random">Random</button>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn" id="startBtn">Start match</button>
+        <button class="btn ghost" id="pauseBtn" disabled>Pause</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn ghost" id="stepBtn" disabled>Step</button>
+        <button class="btn ghost" id="retryBtn" style="display:none">Retry Jev</button>
+      </div>
+
+      <div class="plate wait" id="whitePlate">
+        <h3>WHITE</h3>
+        <div class="kv"><span class="k">Agent</span><span class="v" id="whiteAgent">—</span></div>
+        <div class="kv"><span class="k">Last</span><span class="v" id="whiteLast">—</span></div>
+        <div class="kv"><span class="k">Material</span><span class="v" id="whiteMaterial">Even</span></div>
+        <div class="kv"><span class="k">Confidence</span><span class="v" id="whiteConf">—</span></div>
+        <div class="mass-label">Jev mass</div>
+        <div class="mass"><i id="whiteBar"></i></div>
+        <div id="whiteTop"></div>
+        <div class="operator-metrics">
+          <div class="score-heading"><span id="whiteScoreLabel">Running review</span><span>Stockfish</span></div>
+          <div class="kv"><span class="k">Accuracy <span class="estimate-label">(estimated)</span></span><span class="v" id="whiteAccuracy">—</span></div>
+          <div class="kv"><span class="k">Average CP loss</span><span class="v" id="whiteAcpl">—</span></div>
+          <div class="kv"><span class="k">Inaccuracies / mistakes / blunders</span><span class="v" id="whiteErrors">0 / 0 / 0</span></div>
+          <div class="kv"><span class="k">Moves reviewed</span><span class="v" id="whiteReviewCount">0</span></div>
+        </div>
+      </div>
+      <div class="plate wait" id="blackPlate">
+        <h3>BLACK</h3>
+        <div class="kv"><span class="k">Agent</span><span class="v" id="blackAgent">—</span></div>
+        <div class="kv"><span class="k">Last</span><span class="v" id="blackLast">—</span></div>
+        <div class="kv"><span class="k">Material</span><span class="v" id="blackMaterial">Even</span></div>
+        <div class="kv"><span class="k">Confidence</span><span class="v" id="blackConf">—</span></div>
+        <div class="mass-label">Jev mass</div>
+        <div class="mass"><i id="blackBar"></i></div>
+        <div id="blackTop"></div>
+        <div class="operator-metrics">
+          <div class="score-heading"><span id="blackScoreLabel">Running review</span><span>Stockfish</span></div>
+          <div class="kv"><span class="k">Accuracy <span class="estimate-label">(estimated)</span></span><span class="v" id="blackAccuracy">—</span></div>
+          <div class="kv"><span class="k">Average CP loss</span><span class="v" id="blackAcpl">—</span></div>
+          <div class="kv"><span class="k">Inaccuracies / mistakes / blunders</span><span class="v" id="blackErrors">0 / 0 / 0</span></div>
+          <div class="kv"><span class="k">Moves reviewed</span><span class="v" id="blackReviewCount">0</span></div>
+        </div>
+      </div>
+
+      <div class="plate" id="jevScorePlate">
+        <h3>JEV SCORE</h3>
+        <p class="score-note">Elo from Jev’s ACPL vs a deep-engine review curve. Depth 10 is scaled up. Stockfish itself does not go below 1320.</p>
+        <div class="kv"><span class="k">Est. Elo</span><span class="v" id="jevElo">—</span></div>
+        <div class="kv"><span class="k">Stockfish skill</span><span class="v" id="jevSkill">—</span></div>
+        <div class="kv"><span class="k">Jev W-D-L</span><span class="v" id="jevWdl">0-0-0</span></div>
+        <div class="kv"><span class="k">White / Black wins</span><span class="v" id="colorWins">0 / 0</span></div>
+        <div class="kv"><span class="k">Draws</span><span class="v" id="drawCount">0</span></div>
+        <div class="kv"><span class="k">Games</span><span class="v" id="jevGames">0</span></div>
+        <div class="kv"><span class="k">Career accuracy</span><span class="v" id="jevCareerAcc">—</span></div>
+        <div class="kv"><span class="k">Career ACPL</span><span class="v" id="jevCareerAcpl">—</span></div>
+        <button class="btn ghost" id="resetScore" type="button">Reset score</button>
+      </div>
+
+      <h2>Rack</h2>
+      <div class="field operator-toggle">
+        <label><input id="operatorReview" type="checkbox" checked /> Operator review</label>
+        <p>Stockfish evaluates for the operator. Jev uses its own move choices.</p>
+      </div>
+      <div class="field">
+        <label for="pace">Pace after ply (ms)</label>
+        <input id="pace" type="number" min="0" max="3000" value="400" />
+      </div>
+      <div class="field">
+        <label for="cap">Candidate cap</label>
+        <select id="cap">
+          <option value="8">8</option>
+          <option value="16">16</option>
+          <option value="32" selected>32</option>
+          <option value="64">64</option>
+          <option value="all">all ≤255</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="payload">Payload</label>
+        <select id="payload">
+          <option value="compact" selected>compact FEN+LAN</option>
+          <option value="rich">debug-rich</option>
+        </select>
+      </div>
+      <div class="field">
+        <label><input id="analyst" type="checkbox" /> Analyst fan-out (plan / quality / sharp)</label>
+      </div>
+      <div class="field">
+        <label for="whiteInstr">White instructions</label>
+        <textarea id="whiteInstr" rows="3"></textarea>
+      </div>
+      <div class="field">
+        <label for="blackInstr">Black instructions</label>
+        <textarea id="blackInstr" rows="3"></textarea>
+      </div>
+      <p class="check">The instruction box barely moves Jev. It only picks among the LAN list chess.js already filtered: mates only if any, then no stalemate, repetition, fifty-move, or futile checks. Tags are 1-ply facts, not a search.</p>
+      <div class="field">
+        <label for="timeout">Timeout (ms)</label>
+        <input id="timeout" type="number" min="2000" max="20000" value="8000" />
+      </div>
+      <div class="field">
+        <label for="fenIn">Start FEN (optional)</label>
+        <input id="fenIn" type="text" spellcheck="false" placeholder="leave blank for initial" />
+      </div>
+      <div class="field" id="keyField" style="display:none">
+        <label for="apiKey">TypeSafe API key</label>
+        <input id="apiKey" type="password" autocomplete="off" />
+      </div>
+      <div class="kv"><span class="k">Sent / legal</span><span class="v" id="sentLegal">—</span></div>
+      <div class="kv"><span class="k">Tokens</span><span class="v" id="tokLine">—</span></div>
+      <div id="analystOut" class="answer-block" style="display:none"></div>
+
+      <h2>Ply tape</h2>
+      <div id="history"></div>
+      <div class="btn-row">
+        <button class="btn ghost" id="prevPly">Prev</button>
+        <button class="btn ghost" id="nextPly">Next</button>
+        <button class="btn ghost" id="livePly">Live</button>
+      </div>
+    </aside>
+  </div>
+  <div class="promo-overlay" id="promoOverlay">
+    <div class="promo-card">
+      <h3>Promote</h3>
+      <div class="promo-choices" id="promoChoices"></div>
+      <button class="btn ghost" id="promoCancel">Cancel</button>
+    </div>
+  </div>
+  <script type="module" src="./arena.js"></script>
+</body>
+</html>

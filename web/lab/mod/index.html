@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" data-booth="mod">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CAT-05 Mod — Jev Broadcast Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;600&family=Red+Hat+Text:wght@400;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../shared/broadcast.css" />
+</head>
+<body>
+  <div class="booth">
+    <section class="stage">
+      <p class="kicker">CAT-05 · Moderator</p>
+      <h1>Allow, warn, or block.</h1>
+      <p class="lede">Choice on the policy action. Speculative Nouls ride along and are unused by the gate. They are calibration, not extra votes.</p>
+      <div id="gate" class="gate">STANDBY</div>
+      <div id="out"></div>
+    </section>
+    <aside class="rack">
+      <h2>Post</h2>
+      <div class="field">
+        <label for="post">User content</label>
+        <textarea id="post">This replay booth is fire. Anyone got a spare CAT-01 seat?</textarea>
+      </div>
+      <div class="field" id="keyField" style="display:none">
+        <label for="apiKey">TypeSafe API key</label>
+        <input id="apiKey" type="password" autocomplete="off" />
+      </div>
+      <button class="btn" id="runBtn">Moderate</button>
+    </aside>
+  </div>
+  <script type="module" src="./mod.js"></script>
+</body>
+</html>

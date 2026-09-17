@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" data-booth="router">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CAT-02 Router — Jev Broadcast Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;600&family=Red+Hat+Text:wght@400;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../shared/broadcast.css" />
+</head>
+<body>
+  <div class="booth">
+    <section class="stage">
+      <p class="kicker">CAT-02 · Desk Router</p>
+      <h1>One ticket. Three questions.</h1>
+      <p class="lede">Choice team, Score urgency, Noul refund — one System One call. Independent questions cannot see each other. Code owns the desk mapping after Jev returns.</p>
+      <div id="out"></div>
+    </section>
+    <aside class="rack">
+      <h2>Ticket</h2>
+      <div class="field">
+        <label for="ticket">Inbound copy</label>
+        <textarea id="ticket">Charged twice for the same seat. I need the extra $49 back today or I am canceling.</textarea>
+      </div>
+      <div class="field" id="keyField" style="display:none">
+        <label for="apiKey">TypeSafe API key</label>
+        <input id="apiKey" type="password" autocomplete="off" />
+      </div>
+      <button class="btn" id="runBtn">Route</button>
+    </aside>
+  </div>
+  <script type="module" src="./router.js"></script>
+</body>
+</html>

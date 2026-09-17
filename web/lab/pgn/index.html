@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" data-booth="pgn">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CAT-07 PGN — Jev Broadcast Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;600&family=Red+Hat+Text:wght@400;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../shared/broadcast.css" />
+</head>
+<body>
+  <div class="booth">
+    <section class="stage">
+      <p class="kicker">CAT-07 · PGN studio</p>
+      <h1>Opening, blunder flag, puzzle shortlist.</h1>
+      <p class="lede">Chess.js still owns legality. Opening is Choice over a few first-move LANs. Blunder Noul is compared to local facts, not treated as truth. Puzzle Score sits on a capped shortlist.</p>
+      <div class="board-wrap" style="max-width:min(52vh,420px)">
+        <g-chess-board id="board" coordinates="inside"></g-chess-board>
+      </div>
+      <p class="check" id="facts">Local facts appear here after a run.</p>
+      <div id="out"></div>
+    </section>
+    <aside class="rack">
+      <h2>Mode</h2>
+      <div class="seg" id="modeSeg">
+        <button data-mode="opening" class="active" aria-pressed="true">Opening</button>
+        <button data-mode="blunder">Blunder</button>
+        <button data-mode="puzzle">Puzzle</button>
+      </div>
+      <div class="field">
+        <label for="pgn">PGN or SAN line (blunder mode)</label>
+        <textarea id="pgn" rows="4">1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#</textarea>
+      </div>
+      <div class="field">
+        <label for="fen">Puzzle FEN</label>
+        <input id="fen" type="text" spellcheck="false" value="6k1/5ppp/8/8/8/8/5PPP/4Q1K1 w - - 0 1" />
+      </div>
+      <div class="field" id="keyField" style="display:none">
+        <label for="apiKey">TypeSafe API key</label>
+        <input id="apiKey" type="password" autocomplete="off" />
+      </div>
+      <button class="btn" id="runBtn">Run</button>
+    </aside>
+  </div>
+  <script type="module" src="./pgn.js"></script>
+</body>
+</html>

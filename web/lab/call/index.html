@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" data-booth="call">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CAT-06 Caller — Jev Broadcast Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;600&family=Red+Hat+Text:wght@400;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../shared/broadcast.css" />
+</head>
+<body>
+  <div class="booth">
+    <section class="stage">
+      <p class="kicker">CAT-06 · Function caller</p>
+      <h1>Closed names. Numbers in code.</h1>
+      <p class="lede">Jev picks a function and enum args. The amount is parsed here with Number(). Jev never emits free-form JSON.</p>
+      <div class="answer-block" id="callout">No call yet.</div>
+      <div id="out"></div>
+    </section>
+    <aside class="rack">
+      <h2>Utterance</h2>
+      <div class="field">
+        <label for="utter">Operator line</label>
+        <textarea id="utter">Refund the duplicate $49.50 to this card, reason duplicate_charge.</textarea>
+      </div>
+      <div class="field">
+        <label for="amountHint">Amount (parsed in code if present)</label>
+        <input id="amountHint" type="text" value="49.50" />
+      </div>
+      <div class="field" id="keyField" style="display:none">
+        <label for="apiKey">TypeSafe API key</label>
+        <input id="apiKey" type="password" autocomplete="off" />
+      </div>
+      <button class="btn" id="runBtn">Map</button>
+    </aside>
+  </div>
+  <script type="module" src="./call.js"></script>
+</body>
+</html>

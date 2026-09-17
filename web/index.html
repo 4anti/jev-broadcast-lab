@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" data-booth="home">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jev Broadcast Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;600&family=Red+Hat+Text:wght@400;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="./shared/broadcast.css" />
+</head>
+<body>
+  <div class="home">
+    <p class="kicker">CAT-00 · Program</p>
+    <h1>Jev is a function.<br />This is the booth.</h1>
+    <p class="lede">TypeSafe System One returns Choice, Score, and Noul. It does not write commentary, eval bars, or PGN notes. Chess.js owns legality. Local python holds the key. GitHub Pages is static.</p>
+    <div class="home-proof" id="proof">
+      <span><b>TX</b> <span id="proofTx">standby</span></span>
+      <span><b>KEY</b> <span id="proofKey">…</span></span>
+      <span><b>MODEL</b> <span id="proofModel">jev-latest</span></span>
+      <span><b>QUEUE</b> <span id="proofQ">—</span></span>
+    </div>
+    <p class="check">Proof on this page is the live strip and a real probe, not partner logos.</p>
+    <div class="field" id="keyField" style="display:none;max-width:420px">
+      <label for="apiKey">TypeSafe API key</label>
+      <input id="apiKey" type="password" autocomplete="off" />
+    </div>
+    <div class="home-cta">
+      <a class="btn" href="arena/">Open Arena</a>
+      <button class="btn ghost" id="probeBtn">Probe Jev</button>
+      <a class="btn ghost" href="deck/presentation.html">Pitch deck</a>
+    </div>
+    <div id="out"></div>
+    <div class="booth-index">
+      <a href="arena/"><span class="id">CAT-01</span>Arena</a>
+      <a href="lab/router/"><span class="id">CAT-02</span>Router</a>
+      <a href="lab/guard/"><span class="id">CAT-03</span>Guard</a>
+      <a href="lab/rank/"><span class="id">CAT-04</span>Rank</a>
+      <a href="lab/mod/"><span class="id">CAT-05</span>Mod</a>
+      <a href="lab/call/"><span class="id">CAT-06</span>Caller</a>
+      <a href="lab/pgn/"><span class="id">CAT-07</span>PGN</a>
+      <a href="lab/loop/"><span class="id">CAT-08</span>Loop</a>
+      <a href="deck/"><span class="id">CAT-09</span>Deck</a>
+    </div>
+  </div>
+  <script type="module" src="./home.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" data-booth="rank">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CAT-04 Rank — Jev Broadcast Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;600&family=Red+Hat+Text:wght@400;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../shared/broadcast.css" />
+</head>
+<body>
+  <div class="booth">
+    <section class="stage">
+      <p class="kicker">CAT-04 · Ranker / Semantic Find</p>
+      <h1>Choice over line ids. Cap 255.</h1>
+      <p class="lede">Jev picks a passage id. Code truncates the option list and paints the hit. Toggle overflow to see sent / legal counts when the doc is larger than the Choice cap.</p>
+      <div class="kv"><span class="k">Sent / lines</span><span class="v" id="sentLegal">—</span></div>
+      <div class="line-list" id="lines"></div>
+      <div id="out"></div>
+    </section>
+    <aside class="rack">
+      <h2>Find</h2>
+      <div class="field">
+        <label for="query">Query</label>
+        <input id="query" type="text" value="Where is the refund SLA?" />
+      </div>
+      <div class="field">
+        <label><input id="overflow" type="checkbox" /> Pad to 280 lines (show 255 truncation)</label>
+      </div>
+      <div class="field" id="keyField" style="display:none">
+        <label for="apiKey">TypeSafe API key</label>
+        <input id="apiKey" type="password" autocomplete="off" />
+      </div>
+      <button class="btn" id="runBtn">Find</button>
+    </aside>
+  </div>
+  <script type="module" src="./rank.js"></script>
+</body>
+</html>
