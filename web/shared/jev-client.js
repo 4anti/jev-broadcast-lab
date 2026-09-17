@@ -30,9 +30,31 @@ function proxyBase() {
   }
 }
 
-async function post(url, { headers, body, signal }) {
+let sessionWait = null;
+
+export function startProxySession() {
+  const proxy = proxyBase();
+  if (!proxy) return Promise.resolve();
+  if (!sessionWait) {
+    sessionWait = fetch(proxy + "/session", { credentials: "include" }).then((res) => {
+      if (!res.ok) throw new Error("Proxy session failed");
+    }).catch((err) => {
+      sessionWait = null;
+      throw err;
+    });
+  }
+  return sessionWait;
+}
+
+async function post(url, { headers, body, signal, cookies }) {
   const t0 = performance.now();
-  const res = await fetch(url, { method: "POST", headers, body, signal });
+  const res = await fetch(url, {
+    method: "POST",
+    headers,
+    body,
+    signal,
+    credentials: cookies ? "include" : "same-origin"
+  });
   const ms = performance.now() - t0;
   const raw = await res.text();
   if (!res.ok) {
@@ -59,7 +81,8 @@ export async function systemOne({ state, questions, model = "jev-latest", apiKey
   const local = ENDPOINT;
   const first = proxy ? proxy + "/v1/systemone" : (pagesHost() && apiKey ? UPSTREAM : local);
   try {
-    return await post(first, { headers, body, signal: sig });
+    if (proxy) await startProxySession();
+    return await post(first, { headers, body, signal: sig, cookies: Boolean(proxy) });
   } catch (err) {
     if (err.name === "AbortError") throw err;
     if (err instanceof TypeError && (first === UPSTREAM || Boolean(proxy))) {
@@ -68,7 +91,7 @@ export async function systemOne({ state, questions, model = "jev-latest", apiKey
     const canFallback = first === local && apiKey && (!err.status || err.status === 404 || err.status === 405);
     if (!canFallback) throw err;
     try {
-      return await post(UPSTREAM, { headers, body, signal: sig });
+      return await post(UPSTREAM, { headers, body, signal: sig, cookies: false });
     } catch (up) {
       if (up instanceof TypeError) {
         throw new Error("TypeSafe blocked this origin. Run python server.py so the key stays on the server.");

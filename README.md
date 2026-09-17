@@ -48,7 +48,9 @@ GitHub Pages is a static host. Anything in the published `web/` folder is public
 
 Local live Jev: `python server.py` with `.env`. That is the supported operator path.
 
-Public live Jev needs a tiny proxy that attaches the key on the server:
+There is no way to use the TypeSafe key on the public site without storing it somewhere you control. If it is in JavaScript, anyone can copy it. If the browser never sees it, a server (this proxy, or `server.py`) must hold it and attach it.
+
+Public live Jev uses that proxy:
 
 1. Create a free Cloudflare account.
 2. Add repo secrets `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, and `TYPESAFE_API_KEY`.
@@ -56,7 +58,7 @@ Public live Jev needs a tiny proxy that attaches the key on the server:
 4. Copy the worker URL (example: `https://jev-broadcast-lab.<subdomain>.workers.dev`) into repo secret `JEV_PROXY_URL`.
 5. Re-run the `pages` workflow. The published site then calls the proxy. The browser never sees the TypeSafe key.
 
-The worker only answers browser calls from `https://4anti.github.io`. Anyone who spoofs that Origin can still spend quota. That is the limit of a public demo. Do not treat the worker as a private API.
+Other websites cannot call Jev in a browser. The proxy checks Origin, `Sec-Fetch-Site`, and an HttpOnly cookie issued only to this lab. A script that fakes those headers can still spend quota. Rate limit is 40 calls per IP per minute. Cloudflare Access is the next step if that is not enough.
 
 If you host `server.py` yourself instead, set `CORS_ORIGINS=https://4anti.github.io` and use that host as `JEV_PROXY_URL`.
 

@@ -1,4 +1,5 @@
 import { SITE, siteUrl, pathNorm } from "./site.js";
+import { startProxySession } from "./jev-client.js";
 
 const LINKS = [
   { path: "", id: "CAT-00", label: "Home" },
@@ -91,6 +92,7 @@ export async function bootChrome({ booth }) {
       key.textContent = cfg.hasEnvKey ? (cfg.proxy ? "proxy" : "env key") : "paste key";
       key.classList.add(cfg.hasEnvKey ? "ok" : "warn");
     }
+    if (cfg.proxy) startProxySession().catch(() => {});
   } catch (_) {
     window.__JEV_CFG = { hasEnvKey: false, modelDefault: "jev-latest" };
     if (key) {
